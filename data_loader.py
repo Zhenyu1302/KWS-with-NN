@@ -20,8 +20,3 @@ class SubsetSC(SPEECHCOMMANDS):
             excludes = load_list("validation_list.txt") + load_list("testing_list.txt")
             excludes = set(excludes)
             self._walker = [w for w in self._walker if w not in excludes]
-
-
-# Create training and testing split of the data. 
-train_set = SubsetSC("training")
-test_set = SubsetSC("testing")
