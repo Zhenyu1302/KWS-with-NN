@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from data_loader import SubsetSC, collate_fn
-from model import CiC1D_s, CiC3D
+from model import CiC1D_s, CiC3D, CNN_S
 from train import train, test
 
 # Determine the device type
@@ -54,7 +54,7 @@ test_loader = torch.utils.data.DataLoader(
 
 # Push model to device
 # Include all the models in benchmark
-MODELS = nn.ModuleList([CiC1D_s(),CiC3D()])
+MODELS = nn.ModuleList([CNN_S(),CiC1D_s(),CiC3D()])
 for model in MODELS:
   model.to(device)
   
@@ -65,8 +65,9 @@ for epoch in range(1, n_epoch + 1):
     train(MODELS, epoch, log_interval)
     error_rate = test(MODELS, epoch)
 x = np.linspace(1,n_epoch,n_epoch)
-plt.plot(x,error_rate[0],label='CiC1D')
-plt.plot(x,error_rate[1],label='CiC3D')
+plt.plot(x,error_rate[0],label='CNN')
+plt.plot(x,error_rate[1],label='CiC1D')
+plt.plot(x,error_rate[2],label='CiC3D')
 plt.xlabel('Epoch')
 plt.ylabel('Error Rate')
 plt.title('Accuracy of CiC')
