@@ -53,6 +53,7 @@ test_loader = torch.utils.data.DataLoader(
 )
 
 # Push model to device
+# Include all the models in benchmark
 MODELS = nn.ModuleList([CiC1D_s(),CiC3D()])
 for model in MODELS:
   model.to(device)
@@ -71,3 +72,4 @@ plt.ylabel('Error Rate')
 plt.title('Accuracy of CiC')
 plt.legend()
 plt.show()
+plt.savefig('/srv/scratch/z5282382/KWS_benchmark.png')
