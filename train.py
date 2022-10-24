@@ -23,7 +23,7 @@ def train(MODELS_list, epoch, log_interval):
           optimizer.step()
           # print training stats
           if batch_idx % log_interval == 0:
-              print(f"Train Epoch {type(model).__name__}: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)} ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}")
+              print(f"Train {type(model).__name__} Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)} ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}")
               
 def number_of_correct(pred, target):
     # count number of correct predictions
@@ -36,7 +36,7 @@ def get_likely_index(tensor):
 def test(MODELS_list, epoch):
     for model in MODELS_list:
         model.eval()    
-    correct = [0,0] # should be determined by the MODELS_lists length
+    correct = np.zeros(len(MODELS_list))
     for data, target in test_loader:
 
         data = data.to(device)
@@ -51,7 +51,9 @@ def test(MODELS_list, epoch):
             pred = get_likely_index(output)
             correct[i] += number_of_correct(pred, target)
             i += 1
-            print(f"\nTest Epoch {type(model).__name__}: {epoch}\tAccuracy: {correct[0]}/{len(test_loader.dataset)} ({100. * correct[0] / len(test_loader.dataset):.0f}%)\n")
+    
+    for i in range(len(MODELS_list)):
+        print(f"\nTest {type(model).__name__} Epoch: {epoch}\tAccuracy: {correct[i]}/{len(test_loader.dataset)} ({100. * correct[i] / len(test_loader.dataset):.0f}%)\n")
 
     error_rate = 1-correct/len(test_loader.dataset)
 
