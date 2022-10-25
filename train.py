@@ -34,7 +34,9 @@ def collate_fn(batch):
     targets = torch.stack(targets)
     return tensors, targets
 
-def train(MODELS_list, epoch, log_interval,train_loader,device):
+def train(MODELS_list, epoch, log_interval,train_loader,labels_list, device):
+    global labels
+    labels = labels_list
     for model in MODELS_list:
         model.train()      
     for batch_idx, (data, target) in enumerate(train_loader):
@@ -65,7 +67,7 @@ def get_likely_index(tensor):
     # find most likely label index for each element in the batch
     return tensor.argmax(dim=-1)
 
-def test(MODELS_list, epoch,test_loader,device):
+def test(MODELS_list, epoch,test_loader,labels_list,device):
     for model in MODELS_list:
         model.eval()    
     correct = np.zeros(len(MODELS_list))
