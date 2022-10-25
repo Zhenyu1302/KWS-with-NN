@@ -61,13 +61,15 @@ for model in MODELS:
 # Train the model
 log_interval = 20
 n_epoch = 10
+accuracy = np.zeros((len(MODELS),n_epoch))
 for epoch in range(1, n_epoch + 1):
     train(MODELS, epoch, log_interval,train_loader,labels,device)
     error_rate = test(MODELS, epoch,test_loader,labels,device)
+    accuracy[:,epoch-1] = error_rate
 x = np.linspace(1,n_epoch,n_epoch)
-plt.plot(x,error_rate[0],label='CNN')
-plt.plot(x,error_rate[1],label='CiC1D')
-plt.plot(x,error_rate[2],label='CiC3D')
+plt.plot(x,accuracy[0],label='CNN')
+plt.plot(x,accuracy[1],label='CiC1D')
+plt.plot(x,accuracy[2],label='CiC3D')
 plt.xlabel('Epoch')
 plt.ylabel('Error Rate')
 plt.title('Accuracy of CiC')
