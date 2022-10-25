@@ -70,7 +70,7 @@ def get_likely_index(tensor):
 def test(MODELS_list, epoch,test_loader,labels_list,device):
     for model in MODELS_list:
         model.eval()    
-    correct = np.zeros((len(MODELS_list),epoch))
+    correct = np.zeros(len(MODELS_list))
     for data, target in test_loader:
 
         data = data.to(device)
@@ -83,7 +83,7 @@ def test(MODELS_list, epoch,test_loader,labels_list,device):
         for model in MODELS_list:
             output = model(fbank_features)
             pred = get_likely_index(output)
-            correct[i,epoch] += number_of_correct(pred, target)
+            correct[i] += number_of_correct(pred, target)
             i += 1
     
     for i in range(len(MODELS_list)):
