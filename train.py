@@ -2,7 +2,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
 
-def train(MODELS_list, epoch, log_interval):
+def train(MODELS_list, epoch, log_interval,train_loader):
   for model in MODELS_list:
       model.train()      
   for batch_idx, (data, target) in enumerate(train_loader):
@@ -33,7 +33,7 @@ def get_likely_index(tensor):
     # find most likely label index for each element in the batch
     return tensor.argmax(dim=-1)
 
-def test(MODELS_list, epoch):
+def test(MODELS_list, epoch,test_loader):
     for model in MODELS_list:
         model.eval()    
     correct = np.zeros(len(MODELS_list))
