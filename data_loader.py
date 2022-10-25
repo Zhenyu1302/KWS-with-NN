@@ -1,5 +1,6 @@
 from torchaudio.datasets import SPEECHCOMMANDS
 import os
+import torch
 
 # The dataloder split the Speech Commands dataset according to the basic settings
 # It would download the dataset everytime
