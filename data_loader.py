@@ -21,7 +21,7 @@ class SubsetSC(SPEECHCOMMANDS):
             excludes = set(excludes)
             self._walker = [w for w in self._walker if w not in excludes]
             
- def label_to_index(word):
+def label_to_index(word):
     # Return the position of the word in labels
     return torch.tensor(labels.index(word))
 
