@@ -26,7 +26,7 @@ class CNN_S(nn.Module):
         # Phonetic based requires CTC or other methods to enable mapping
         x = self.pool(F.relu(self.conv1(x)))
         x = F.relu(self.conv2(x))
-        x = x.view(-1,64*27*12)
+        x = x.view(-1,64*17*30)
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
