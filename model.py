@@ -16,7 +16,7 @@ class CNN_S(nn.Module):
                                out_channels = 64,
                                kernel_size = (10,4),
                                dtype=torch.float)
-        self.fc1 = nn.Linear(64*27*12,32) # The output of CNN layer is flattened before being fed in FC layer
+        self.fc1 = nn.Linear(64*17*30,32) # The output of CNN layer is flattened before being fed in FC layer
         self.fc2 = nn.Linear(32,128)
         self.fc3 = nn.Linear(128,35) # The num of output equals to the num of classes
 
