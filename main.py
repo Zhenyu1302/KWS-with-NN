@@ -62,8 +62,8 @@ for model in MODELS:
 log_interval = 20
 n_epoch = 10
 for epoch in range(1, n_epoch + 1):
-    train(MODELS, epoch, log_interval,train_loader)
-    error_rate = test(MODELS, epoch,test_loader)
+    train(MODELS, epoch, log_interval,train_loader,labels,device)
+    error_rate = test(MODELS, epoch,test_loader,labels,device)
 x = np.linspace(1,n_epoch,n_epoch)
 plt.plot(x,error_rate[0],label='CNN')
 plt.plot(x,error_rate[1],label='CiC1D')
