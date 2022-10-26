@@ -54,16 +54,19 @@ test_loader = torch.utils.data.DataLoader(
 
 # Push model to device
 # Include all the models in benchmark
+# Re-configurate optimizer affect CNN performance, so we configurate all and store them in a list
+optimizer = []
 MODELS = nn.ModuleList([CNN_S(),CiC1D_s(),CiC3D()])
 for model in MODELS:
   model.to(device)
+  optimizer.append(optim.Adam(model.parameters(), lr=0.001, weight_decay=0))
   
 # Train the model
 log_interval = 20
 n_epoch = 10
 accuracy = np.zeros((len(MODELS),n_epoch))
 for epoch in range(1, n_epoch + 1):
-    train(MODELS, epoch, log_interval,train_loader,labels,device)
+    train(MODELS, epoch, log_interval,train_loader,labels,device,optimizer)
     error_rate = test(MODELS, epoch,test_loader,labels,device)
     accuracy[:,epoch-1] = error_rate
 x = np.linspace(1,n_epoch,n_epoch)
