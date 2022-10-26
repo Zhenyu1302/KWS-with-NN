@@ -34,7 +34,7 @@ def collate_fn(batch):
     targets = torch.stack(targets)
     return tensors, targets
 
-def train(MODELS_list, epoch, log_interval,train_loader,labels_list, device):
+def train(MODELS_list, epoch, log_interval,train_loader,labels_list, device,optimizer):
     global labels
     labels = labels_list
     for model in MODELS_list:
@@ -47,17 +47,16 @@ def train(MODELS_list, epoch, log_interval,train_loader,labels_list, device):
         # apply features and model on whole batch directly on device
         data = torch.squeeze(data)
         fbank_features = feature(data)
-        for model in MODELS_list:
-            optimizer = optim.Adam(model.parameters(), lr=0.001, weight_decay=0)
-            output = model(fbank_features)
+        for i in range(len(MODELS_list)):
+            output = MODELS_list[i](fbank_features)
             # Loss and backward propagation
             loss = F.cross_entropy(output, target)
-            optimizer.zero_grad()
+            optimizer[i].zero_grad()
             loss.backward()
-            optimizer.step()
+            optimizer[i].step()
             # print training stats
             if batch_idx % log_interval == 0:
-                print(f"Train {type(model).__name__} Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)} ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}")
+                print(f"Train {type(model).__name__}\t Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)} ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}")
               
 def number_of_correct(pred, target):
     # count number of correct predictions
@@ -87,7 +86,7 @@ def test(MODELS_list, epoch,test_loader,labels_list,device):
             i += 1
     
     for i in range(len(MODELS_list)):
-        print(f"\nTest {type(model).__name__} Epoch: {epoch}\tAccuracy: {correct[i]}/{len(test_loader.dataset)} ({100. * correct[i] / len(test_loader.dataset):.0f}%)\n")
+        print(f"\nTest {type(model).__name__}\t Epoch: {epoch} Accuracy: {correct[i]}/{len(test_loader.dataset)} ({100. * correct[i] / len(test_loader.dataset):.0f}%)\n")
 
     error_rate = 1-correct/len(test_loader.dataset)
 
