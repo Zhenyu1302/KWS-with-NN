@@ -8,6 +8,7 @@ import torch.optim as optim
 import torchaudio
 import matplotlib.pyplot as plt
 import numpy as np
+import time
 
 from data_loader import SubsetSC, collate_fn
 from model import CiC1D_s, CiC3D, CNN_S
@@ -78,4 +79,4 @@ plt.ylabel('Error Rate')
 plt.title('Accuracy of CiC')
 plt.legend()
 plt.show()
-plt.savefig('/srv/scratch/z5282382/KWS_benchmark.png')
+plt.savefig('/srv/scratch/z5282382/KWS_benchmark_'+time.strftime("%Y%m%d%H%M%S")+'.png')
