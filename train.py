@@ -56,7 +56,7 @@ def train(MODELS_list, epoch, log_interval,train_loader,labels_list, device,opti
             optimizer[i].step()
             # print training stats
             if batch_idx % log_interval == 0:
-                print(f"Train {type(model).__name__}\t Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)} ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}")
+                print(f"Train {type(MODELS_list[i]).__name__}\t Epoch: {epoch} [{batch_idx * len(data)}/{len(train_loader.dataset)} ({100. * batch_idx / len(train_loader):.0f}%)]\tLoss: {loss.item():.6f}")
               
 def number_of_correct(pred, target):
     # count number of correct predictions
@@ -86,7 +86,7 @@ def test(MODELS_list, epoch,test_loader,labels_list,device):
             i += 1
     
     for i in range(len(MODELS_list)):
-        print(f"\nTest {type(model).__name__}\t Epoch: {epoch} Accuracy: {correct[i]}/{len(test_loader.dataset)} ({100. * correct[i] / len(test_loader.dataset):.0f}%)\n")
+        print(f"\nTest {type(MODELS_list[i]).__name__}\t Epoch: {epoch} Accuracy: {correct[i]}/{len(test_loader.dataset)} ({100. * correct[i] / len(test_loader.dataset):.0f}%)\n")
 
     error_rate = 1-correct/len(test_loader.dataset)
 
