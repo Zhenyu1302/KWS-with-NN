@@ -329,3 +329,55 @@ class CiC3D(nn.Module):
         x = x.view(-1,64*44*7)
         x = self.lin(x)
         return x
+ 
+class CRNN(nn.Module):
+    def __init__(self):
+        super(CRNN,self).__init__()
+        self.conv = nn.Conv2d(in_channels=1,
+                              out_channels=32,
+                              kernel_size=(20,5),
+                              stride=(4,1),
+                              dtype=torch.float)
+        self.gru = nn.GRU(input_size=32*6*36,
+                          hidden_size=32,
+                          num_layers=2,
+                          batch_first=True)
+        self.fc1 = nn.Linear(59*32,64)
+        self.fc2 = nn.Linear(64,35)
+
+    def forward(self,x):
+        x = x.permute(1,0,2,3)
+        conv_x = []
+        # Take the smaller frame out and convolve with the same conv layer
+        for i in range(x.shape[0]):
+            frame_x = torch.unsqueeze(x[i],1)
+            frame = F.relu(self.conv(frame_x))
+            conv_x += [frame]
+        x = torch.stack(tuple(conv_x))
+        x = torch.flatten(x.permute(1,0,2,3,4),start_dim=2)
+        h0 = torch.zeros(2,256,32).cuda()
+        x,hn = self.gru(x,h0)
+        x = torch.flatten(x,start_dim=1)
+        x = F.relu(self.fc1(x))
+        x = self.fc2(x)
+        return x
+        
+class LSTM(nn.Module):
+
+    def __init__(self):
+        super(LSTM,self).__init__()
+
+        self.lstm = nn.LSTM(input_size=40*40,
+                            hidden_size=64,
+                            batch_first=True,
+                            proj_size=32)
+        self.lin = nn.Linear(59*32,35)
+
+    def forward(self,x):
+        h0 = torch.zeros(1,256,32).cuda()
+        c0 = torch.zeros(1,256,64).cuda()
+        x = torch.flatten(x,start_dim=2)
+        x, (hn,cn) = self.lstm(x,(h0,c0))
+        x = torch.flatten(x,start_dim=1)
+        x = self.lin(x)
+        return x
