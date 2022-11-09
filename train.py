@@ -3,7 +3,7 @@ import torch.optim as optim
 import torch.nn.functional as F
 import numpy as np
 
-from features import feature
+from features import feature,feature_stack
 
 def label_to_index(word):
     # Return the position of the word in labels
@@ -46,8 +46,11 @@ def train(MODELS_list, epoch, log_interval,train_loader,labels_list, device,opti
         
         # apply features and model on whole batch directly on device
         data = torch.squeeze(data)
-        fbank_features = feature(data)
         for i in range(len(MODELS_list)):
+            if type(MODELS_list[i]).__name__ == 'CRNN' or type(MODELS_list[i]).__name__ == 'LSTM':
+                fbank_features = feature_stack(data)
+            else:
+                fbank_features = feature(data)
             output = MODELS_list[i](fbank_features)
             # Loss and backward propagation
             loss = F.cross_entropy(output, target)
@@ -77,9 +80,12 @@ def test(MODELS_list, epoch,test_loader,labels_list,device):
 
         # apply transform and model on whole batch directly on device
         data = torch.squeeze(data)
-        fbank_features = feature(data)
         i = 0
         for model in MODELS_list:
+            if type(model).__name__ == 'CRNN' or type(model).__name__ == 'LSTM':
+                fbank_features = feature_stack(data)
+            else:
+                fbank_features = feature(data)
             output = model(fbank_features)
             pred = get_likely_index(output)
             correct[i] += number_of_correct(pred, target)
