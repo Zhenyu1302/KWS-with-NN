@@ -60,6 +60,8 @@ test_loader = torch.utils.data.DataLoader(
 optimizer = []
 MODELS = nn.ModuleList([CNN_S(),CiC1D_s(),CiC3D()])
 for model in MODELS:
+    if torch.cuda.device_count() > 1:
+        model = nn.DataParallel(model)
   model.to(device)
   optimizer.append(optim.Adam(model.parameters(), lr=0.001, weight_decay=0))
   
