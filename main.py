@@ -10,9 +10,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import time
 
-from data_loader import SubsetSC, collate_fn
+from data_loader import SubsetSC
 from model import CiC1D_s, CiC3D, CNN_S
-from train import train, test
+from train import train, test, collate_fn
 
 # Determine the device type
 # It could run on CPU and GPU
