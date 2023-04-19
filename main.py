@@ -35,6 +35,8 @@ else:
     num_workers = 0
     pin_memory = False
 
+# Prepare dataloder
+# drop_last is set to true to ensure each batch has same number of samples
 train_loader = torch.utils.data.DataLoader(
     train_set,
     batch_size=batch_size,
@@ -66,8 +68,8 @@ for model in MODELS:
   optimizer.append(optim.Adam(model.parameters(), lr=0.001, weight_decay=0))
   
 # Train the model
-log_interval = 20
-n_epoch = 10
+log_interval = 20 # Define how often to print training statistics
+n_epoch = 10 # Define the number of epochs
 accuracy = np.zeros((len(MODELS),n_epoch))
 for epoch in range(1, n_epoch + 1):
     train(MODELS, epoch, log_interval,train_loader,labels,device,optimizer)
