@@ -1,7 +1,7 @@
 import torch
 import torchaudio
 
-# Take waveform out and transform into fbank feature map
+# Take waveform in the batch out and transform into fbank feature map
 # Then pack them back to batch
 def feature(data):
     # Extract fbank feature and feature maps
@@ -18,6 +18,7 @@ def feature(data):
 
 # Stack frames to form feature maps
 # Feature extraction method compatible with RNN-related or phonetic based non-streaming model
+# This allows to use the same dataset to model streaming model, but the actual case would be more complicated
 def feature_stack(data):
     # Extract fbank feature and feature maps
     # Stack adjacent 40 frames
